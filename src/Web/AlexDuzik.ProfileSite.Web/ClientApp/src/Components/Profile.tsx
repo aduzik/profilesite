@@ -65,6 +65,29 @@ const Profile: React.FC = () => {
                         </ul>
                     </main>
                 </article>
+                <article>
+                    <header className='border-b border-b-gray-400 flex flex-row items-baseline'>
+                        <h2>
+                            Aviva USA
+                        </h2>
+                        <span className='ml-auto'>June 2009-October 2011</span>
+                    </header>
+                    <main>
+                        <h3>SharePoint Developer</h3>
+                    </main>
+                </article>
+                <article>
+                    <header className='border-b border-b-gray-400 flex flex-row items-baseline'>
+                        <h2>
+                            Sogeti USA
+                        </h2>
+                        <span className='ml-auto'>January 2007-June 2009</span>
+                    </header>
+                    <main>
+                        <h3>Senior Consultant <span className='text-base'>(December 2008-June 2009)</span></h3>
+                        <h3>Consultant <span className='text-base'>(January 2007-December 2008)</span></h3>
+                    </main>
+                </article>
             </div>
         </Container>
     )

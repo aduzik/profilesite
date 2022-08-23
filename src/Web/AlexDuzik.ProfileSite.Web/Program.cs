@@ -1,10 +1,13 @@
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddRouting(options => {
+builder.Services.AddRouting(options =>
+{
     options.LowercaseUrls = true;
 });
 
 var app = builder.Build();
+
+app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 

@@ -55,11 +55,16 @@ const NavBar: React.FC = () => {
                 </div>
             </div>
             <nav ref={navRef} className={navClasses.join(' ')}>
-                <ul>
+                <ul className='flex flex-row'>
                     <li>
                         <NavBarLink
                             text="Profile"
                             url="/profile" />
+                    </li>
+                    <li>
+                        <NavBarLink
+                            text="Contact"
+                            url="/contact" />
                     </li>
                 </ul>
             </nav>
@@ -92,7 +97,7 @@ const NavBarLink: React.FC<NavBarLinkProps> = (props) => {
     }
 
     return (
-        <div className='block'>
+        <div className='block mx-2'>
             <NavLink to={url} className={styleLink}>
                 {text}
             </NavLink>

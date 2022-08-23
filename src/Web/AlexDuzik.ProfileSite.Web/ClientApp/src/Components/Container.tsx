@@ -8,7 +8,7 @@ const Container: React.FC<ContainerProps> = (props) => {
     } = props;
 
     return (
-        <div className='container mx-auto'>
+        <div className='container mx-auto px-2'>
             {children}
         </div>
     )
