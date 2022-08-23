@@ -3,14 +3,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRouting(options => {
     options.LowercaseUrls = true;
 });
-builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
+app.UseStaticFiles();
+
 app.UseRouting();
 
-app.UseEndpoints(endpoints => {
-    endpoints.MapRazorPages();
-});
+app.MapFallbackToFile("index.html");
 
 app.Run();
