@@ -1,6 +1,7 @@
 ﻿using AlexDuzik.ProfileSite.Data;
 using AlexDuzik.ProfileSite.Web.Models;
 using AlexDuzik.ProfileSite.Web.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,6 +36,7 @@ public class PostsController : Controller
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> CreatePost([FromForm] CreatePostModel model, CancellationToken cancellationToken)
     {
         var now = DateTime.UtcNow;
@@ -49,11 +51,31 @@ public class PostsController : Controller
 
         _dbContext.Posts.Add(post);
         await _dbContext.SaveChangesAsync(cancellationToken);
+        
+        return NoContent();
+    }
+
+    [HttpPut("{postId:guid}")]
+    [Authorize]
+    public async Task<IActionResult> UpdatePost(Guid postId, [FromForm] CreatePostModel model, CancellationToken cancellationToken)
+    {
+        var post = await _dbContext.Posts.FindAsync(new object[] { postId }, cancellationToken);
+        if (post == null)
+        {
+            return NotFound();
+        }
+
+        post.Title = model.Title;
+        post.Body = model.Body;
+        post.Modified = DateTime.UtcNow;
+
+        _dbContext.Update(post);
+        await _dbContext.SaveChangesAsync(cancellationToken);
 
         return NoContent();
     }
 
-    [HttpGet("{postId}")]
+    [HttpGet("{postId:guid}")]
     public async Task<IActionResult> GetPost(Guid postId, CancellationToken cancellationToken)
     {
         var post = await _dbContext.Posts.FindAsync(new object[] { postId }, cancellationToken);
@@ -70,5 +92,21 @@ public class PostsController : Controller
                 Body = post.Body,
                 Date = post.Created
             });
+    }
+
+    [HttpDelete("{postId:guid}")]
+    [Authorize]
+    public async Task<IActionResult> DeletePost(Guid postId, CancellationToken cancellationToken)
+    {
+        var post = await _dbContext.Posts.FindAsync(new object[] { postId }, cancellationToken);
+        if (post == null)
+        {
+            return NotFound();
+        }
+
+        _dbContext.Posts.Remove(post);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        return NoContent();
     }
 }

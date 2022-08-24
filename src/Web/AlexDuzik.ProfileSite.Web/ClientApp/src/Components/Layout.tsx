@@ -17,7 +17,7 @@ const Layout: React.FC<LayoutProps> = (props) => {
                     <NavBar />
                 </Container>
             </header>
-            <main>
+            <main className='grow flex flex-col'>
                 {children}
             </main>
             <footer className='mt-auto mb-3'>

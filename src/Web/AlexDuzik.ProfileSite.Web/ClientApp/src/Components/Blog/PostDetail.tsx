@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import PostEditor from './PostEditor';
 import { Post } from './Types';
 
 type RouteParams = {
@@ -8,10 +9,14 @@ type RouteParams = {
 
 const PostDetail = () => {
     const { id } = useParams() as RouteParams;
-
     const [post, setPost] = useState<Post | undefined>(undefined);
+    const [title, setTitle] = useState<string | undefined>(undefined);
+    const [body, setBody] = useState<string | undefined>(undefined);
+    const navigate = useNavigate();
 
     useEffect(() => {
+        if (post) return;
+
         (async () => {
             const response = await fetch(`/api/posts/${id}`, {
                 method: 'GET',
@@ -23,9 +28,39 @@ const PostDetail = () => {
             if (!response.ok) return;
 
             const post = await response.json() as Post;
+            const {
+                title,
+                body
+            } = post;
+
+            setTitle(title);
+            setBody(body);
             setPost(post);
         })();
-    })
+    });
+
+    const onSave = useCallback(() => {
+        if (!title || !body) return;
+
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('body', body);
+
+        (async () => {
+            const response = await fetch(`/api/posts/${id}`, {
+                method: 'PUT',
+                body: formData
+            });
+
+            if (!response.ok) return;
+
+            navigate('/_admin');
+        })();
+    }, [id, title, body, navigate]);
+
+    const onCancel = useCallback(() => {
+        navigate('/_admin');
+    }, [navigate]);
 
     if (!post) {
         return (
@@ -33,25 +68,15 @@ const PostDetail = () => {
         )
     }
 
-    const {
-        title,
-        body,
-        date
-    } = post;
-
     return (
-        <div>
-            <div>
-                <button>Save</button>
-                <button>Cancel</button>
-            </div>
-            <div>
-                <input type="text" value={title} />
-            </div>
-            <div>
-                <textarea value={body}></textarea>
-            </div>
-        </div>
+        <PostEditor
+            editorTitle='Edit Post'
+            title={title}
+            onTitleChange={setTitle}
+            body={body}
+            onBodyChange={setBody}
+            onSaveClick={onSave}
+            onCancelClick={onCancel} />
     )
 }
 
