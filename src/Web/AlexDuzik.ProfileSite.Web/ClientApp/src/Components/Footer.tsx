@@ -3,7 +3,7 @@ import React from 'react';
 const Footer: React.FC = () => {
     return (
         <div>
-            <div className='flex flex-row'>
+            <div className='flex flex-row items-center'>
                 <span>
                     Copyright &copy; 2022 Alex Duzik.
                 </span>

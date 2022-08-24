@@ -39,6 +39,10 @@ const NavBar: React.FC = () => {
         });
     }, [expanded]);
 
+    const onNavClick = useCallback(() => {
+        setExpanded(false);
+    }, []);
+
     return (
         <header className='md:flex md:flex-row md:items-center'>
             <div className='flex flex-row items-center'>
@@ -54,8 +58,8 @@ const NavBar: React.FC = () => {
                     </button>
                 </div>
             </div>
-            <nav ref={navRef} className={navClasses.join(' ')}>
-                <ul className='flex flex-row'>
+            <nav ref={navRef} className={navClasses.join(' ')} onClick={onNavClick}>
+                <ul className='md:flex md:flex-row'>
                     <li>
                         <NavBarLink
                             text="Profile"
