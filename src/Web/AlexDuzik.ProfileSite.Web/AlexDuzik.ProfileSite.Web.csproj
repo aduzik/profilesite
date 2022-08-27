@@ -17,6 +17,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="6.0.8" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.8">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -38,6 +39,7 @@
   <ItemGroup>
     <ProjectReference Include="..\AlexDuzik.ProfileSite.Abstractions\AlexDuzik.ProfileSite.Abstractions.csproj" />
     <ProjectReference Include="..\AlexDuzik.ProfileSite.Data.Sqlite\AlexDuzik.ProfileSite.Data.Sqlite.csproj" />
+    <ProjectReference Include="..\AlexDuzik.ProfileSite.Data.SqlServer\AlexDuzik.ProfileSite.Data.SqlServer.csproj" />
     <ProjectReference Include="..\AlexDuzik.ProfileSite.Data\AlexDuzik.ProfileSite.Data.csproj" />
   </ItemGroup>
 
@@ -49,7 +51,7 @@
     <!-- Include the newly-built files in the publish output -->
     <ItemGroup>
       <DistFiles Include="$(SpaRoot)build\**" />
-      <ResolvedFileToPublish Include="@(DistFiles-&gt;'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
         <RelativePath>wwwroot\%(RecursiveDir)%(FileName)%(Extension)</RelativePath>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>

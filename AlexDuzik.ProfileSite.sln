@@ -1,27 +1,26 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30114.105
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32804.467
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C43235C1-AE7F-4950-8E45-D18C5EE5CD3A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{F88BAD58-448D-4233-B1FA-71A9143FA359}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlexDuzik.ProfileSite.Web", "src\Web\AlexDuzik.ProfileSite.Web\AlexDuzik.ProfileSite.Web.csproj", "{8824B8E6-3024-4426-9807-9D4620001EC4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlexDuzik.ProfileSite.Web", "src\Web\AlexDuzik.ProfileSite.Web\AlexDuzik.ProfileSite.Web.csproj", "{8824B8E6-3024-4426-9807-9D4620001EC4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlexDuzik.ProfileSite.Abstractions", "src\Web\AlexDuzik.ProfileSite.Abstractions\AlexDuzik.ProfileSite.Abstractions.csproj", "{D7B2D2C4-8F30-4C8D-B3C9-5E944E31856F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlexDuzik.ProfileSite.Abstractions", "src\Web\AlexDuzik.ProfileSite.Abstractions\AlexDuzik.ProfileSite.Abstractions.csproj", "{D7B2D2C4-8F30-4C8D-B3C9-5E944E31856F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlexDuzik.ProfileSite.Data", "src\Web\AlexDuzik.ProfileSite.Data\AlexDuzik.ProfileSite.Data.csproj", "{6E365CB0-DF7E-4CA3-90DC-694C99AF6A07}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlexDuzik.ProfileSite.Data", "src\Web\AlexDuzik.ProfileSite.Data\AlexDuzik.ProfileSite.Data.csproj", "{6E365CB0-DF7E-4CA3-90DC-694C99AF6A07}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlexDuzik.ProfileSite.Data.Sqlite", "src\Web\AlexDuzik.ProfileSite.Data.Sqlite\AlexDuzik.ProfileSite.Data.Sqlite.csproj", "{BB84F448-BC34-40C9-8359-519229C0A6FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlexDuzik.ProfileSite.Data.Sqlite", "src\Web\AlexDuzik.ProfileSite.Data.Sqlite\AlexDuzik.ProfileSite.Data.Sqlite.csproj", "{BB84F448-BC34-40C9-8359-519229C0A6FC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlexDuzik.ProfileSite.Data.SqlServer", "src\Web\AlexDuzik.ProfileSite.Data.SqlServer\AlexDuzik.ProfileSite.Data.SqlServer.csproj", "{D3650041-17AD-4F27-A01E-8A66D77A4333}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{8824B8E6-3024-4426-9807-9D4620001EC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -40,6 +39,13 @@ Global
 		{BB84F448-BC34-40C9-8359-519229C0A6FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB84F448-BC34-40C9-8359-519229C0A6FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB84F448-BC34-40C9-8359-519229C0A6FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3650041-17AD-4F27-A01E-8A66D77A4333}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3650041-17AD-4F27-A01E-8A66D77A4333}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3650041-17AD-4F27-A01E-8A66D77A4333}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3650041-17AD-4F27-A01E-8A66D77A4333}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{F88BAD58-448D-4233-B1FA-71A9143FA359} = {C43235C1-AE7F-4950-8E45-D18C5EE5CD3A}
@@ -47,5 +53,9 @@ Global
 		{D7B2D2C4-8F30-4C8D-B3C9-5E944E31856F} = {F88BAD58-448D-4233-B1FA-71A9143FA359}
 		{6E365CB0-DF7E-4CA3-90DC-694C99AF6A07} = {F88BAD58-448D-4233-B1FA-71A9143FA359}
 		{BB84F448-BC34-40C9-8359-519229C0A6FC} = {F88BAD58-448D-4233-B1FA-71A9143FA359}
+		{D3650041-17AD-4F27-A01E-8A66D77A4333} = {F88BAD58-448D-4233-B1FA-71A9143FA359}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DA5BBE27-5072-403A-96F0-3796A6A046DA}
 	EndGlobalSection
 EndGlobal

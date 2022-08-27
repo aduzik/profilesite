@@ -15,6 +15,8 @@ const Home: React.FC = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        if (typeof posts !== 'undefined') return;
+
         (async () => {
             const response = await fetch('/api/posts', {
                 method: 'GET',

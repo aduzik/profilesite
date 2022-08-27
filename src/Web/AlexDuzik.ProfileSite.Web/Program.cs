@@ -31,7 +31,8 @@ builder.Services.AddDbContext<BlogDbContext>(
                 break;
 
             case "SqlServer":
-                options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServerBlog"));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServerBlog"), 
+                    config => config.MigrationsAssembly("AlexDuzik.ProfileSite.Data.SqlServer"));
                 break;
 
             default:
