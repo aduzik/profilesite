@@ -1,6 +1,6 @@
 import { faClose, faSave } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { ReactFragment, useCallback } from 'react';
+import React, { useCallback } from 'react';
 
 export type PostEditorProps = {
     editorTitle?: string

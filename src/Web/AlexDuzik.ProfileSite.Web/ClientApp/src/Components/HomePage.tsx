@@ -22,7 +22,7 @@ const HomePage: React.FC = () => {
                     I'm a full-stack developer, as comfortable working in React components as I am in Kubernetes.</p>
                 <p>I've done a lot of things so far, but my primary focus has been on .NET Development and SharePoint.
                     I've worked on projects ranging from .NET Framework 2.0 Web Forms apps all the way up to .NET 6.0 SPA. (You're
-                    looking at one of those right now.)
+                    looking at one of those right now. <a href="https://github.com/aduzik/profilesite">Wanna see the code?</a>)
                 </p>
                 <p>I've been fortunate to have the chance to work on some great projects throughout my career. Early on, I did a
                     number of greenfield SharePoint deployments, with some basic customizations. Later on, I worked for an insurance

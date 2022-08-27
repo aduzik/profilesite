@@ -70,6 +70,11 @@ const NavBar: React.FC = () => {
                             text="Contact"
                             url="/contact" />
                     </li>
+                    <li>
+                        <NavBarLink
+                            text="Blog"
+                            url="/blog" />
+                    </li>
                 </ul>
             </nav>
         </header>
