@@ -1,9 +1,9 @@
 ﻿using AlexDuzik.ProfileSite.Data;
 using AlexDuzik.ProfileSite.Web.Models;
 using AlexDuzik.ProfileSite.Web.ViewModels;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace AlexDuzik.ProfileSite.Web.Controllers;
 
@@ -23,56 +23,11 @@ public class PostsController : Controller
     {
         var posts = _dbContext.Posts
             .OrderByDescending(p => p.Created)
-            .Take(10)
-            .Select(p => new PostViewModel
-            {
-                Id = p.Id,
-                Title = p.Title,
-                Body = p.Body,
-                Date = p.Created
-            });
+            .Take(10);
 
-        return Ok(posts);
-    }
+        var viewModels = posts.Select(p => ToViewModel(p));
 
-    [HttpPost]
-    [Authorize]
-    public async Task<IActionResult> CreatePost([FromForm] CreatePostModel model, CancellationToken cancellationToken)
-    {
-        var now = DateTime.UtcNow;
-        var post = new Post
-        {
-            Id = Guid.NewGuid(),
-            Created = now,
-            Modified = now,
-            Title = model.Title,
-            Body = model.Body,
-        };
-
-        _dbContext.Posts.Add(post);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-        
-        return NoContent();
-    }
-
-    [HttpPut("{postId:guid}")]
-    [Authorize]
-    public async Task<IActionResult> UpdatePost(Guid postId, [FromForm] CreatePostModel model, CancellationToken cancellationToken)
-    {
-        var post = await _dbContext.Posts.FindAsync(new object[] { postId }, cancellationToken);
-        if (post == null)
-        {
-            return NotFound();
-        }
-
-        post.Title = model.Title;
-        post.Body = model.Body;
-        post.Modified = DateTime.UtcNow;
-
-        _dbContext.Update(post);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-
-        return NoContent();
+        return Ok(viewModels);
     }
 
     [HttpGet("{postId:guid}")]
@@ -84,21 +39,111 @@ public class PostsController : Controller
             return NotFound();
         }
 
-        return Ok(
-            new PostViewModel
+        return Ok(ToViewModel(post));
+    }
+
+    [HttpGet("{year:int}/{month:int}/{slug}")]
+    public async Task<IActionResult> FindPostByPermalink(int year, int month, string slug)
+    {
+        if (year < 2022 || year > 2099)
+        {
+            return BadRequest();
+        }
+
+        if (month < 1 || month > 12)
+        {
+            return BadRequest();
+        }
+
+        if (string.IsNullOrEmpty((slug)))
+        {
+            return BadRequest();
+        }
+
+        var post = await _dbContext.Posts
+            .FirstOrDefaultAsync(p => 
+                p.Permalink!.Year == year &&
+                p.Permalink!.Month == month &&
+                p.Permalink!.Slug == slug);
+        
+        if (post == null)
+        {
+            return NotFound();
+        }
+
+        var result = new PostViewModel
+        {
+            Id = post.Id,
+            Title = post.Title,
+            Slug = post.Permalink?.Slug,
+            Date = post.Created,
+            Body = post.Body
+        };
+
+        return Ok(result);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreatePost([FromForm] CreatePostModel model, CancellationToken cancellationToken)
+    {
+        var now = DateTime.UtcNow;
+        var post = new Post
+        {
+            Id = Guid.NewGuid(),
+            Created = now,
+            Modified = now,
+            Title = model.Title,
+            Permalink = new Permalink
             {
-                Id = post.Id,
-                Title = post.Title,
-                Body = post.Body,
-                Date = post.Created
+                Year = now.Year,
+                Month = now.Month,
+                Slug = model.Slug
+            },
+            Body = model.Body,
+        };
+
+        _dbContext.Posts.Add(post);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        return CreatedAtAction(
+            nameof(GetPost),
+            new
+            {
+                postId = post.Id
             });
     }
 
-    [HttpDelete("{postId:guid}")]
-    [Authorize]
-    public async Task<IActionResult> DeletePost(Guid postId, CancellationToken cancellationToken)
+    [HttpPut("{postId:guid}")]
+    public async Task<IActionResult> UpdatePost(Guid postId, [FromForm] CreatePostModel model, CancellationToken cancellationToken)
     {
         var post = await _dbContext.Posts.FindAsync(new object[] { postId }, cancellationToken);
+
+        if (post == null)
+        {
+            return NotFound();
+        }
+
+        post.Title = model.Title;
+        post.Permalink = new()
+        {
+            Year = post.Created.Year,
+            Month = post.Created.Month,
+            Slug = model.Slug
+        };
+        post.Body = model.Body;
+        post.Modified = DateTime.UtcNow;
+
+        _dbContext.Posts.Update(post);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        return Ok(ToViewModel(post));
+    }
+
+    [HttpDelete("{postId}")]
+    public async Task<ActionResult> DeletePost(Guid postId, CancellationToken cancellationToken)
+    {
+        var post = await _dbContext.Posts.FindAsync(new object[] { postId }, cancellationToken);
+
         if (post == null)
         {
             return NotFound();
@@ -108,5 +153,18 @@ public class PostsController : Controller
         await _dbContext.SaveChangesAsync(cancellationToken);
 
         return NoContent();
+    }
+
+    private static PostViewModel ToViewModel(Post post)
+    {
+        return new PostViewModel
+        {
+            Id = post.Id,
+            Title = post.Title,
+            Slug = post.Permalink?.Slug,
+            Body = post.Body,
+            Date = post.Created,
+            Permalink = $"/blog/{post.Permalink?.Year:d4}/{post.Permalink?.Month:d2}/{post.Permalink?.Slug}"
+        };
     }
 }

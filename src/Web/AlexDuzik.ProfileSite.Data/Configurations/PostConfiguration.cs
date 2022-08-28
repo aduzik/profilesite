@@ -11,5 +11,13 @@ public class PostConfiguration : IEntityTypeConfiguration<Post>
         builder.HasKey(p => p.Id);
         builder.Property(p => p.Title).IsRequired();
         builder.Property(p => p.Body).IsRequired();
+        builder.OwnsOne(p => p.Permalink,
+                permalink =>
+                {
+                    permalink.Property(p => p.Slug).IsRequired();
+                    permalink.WithOwner();
+                });
+        builder.Navigation(p => p.Permalink)
+            .IsRequired();
     }
 }

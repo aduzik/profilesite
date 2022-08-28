@@ -8,7 +8,6 @@ import Profile from './Components/Profile';
 import Contact from './Components/Contact';
 import NotFound from './Components/NotFound';
 import Admin from './Components/Admin/Admin';
-import Home from './Components/Blog/Home';
 import Blog from './Components/Blog/Blog';
 
 function App() {

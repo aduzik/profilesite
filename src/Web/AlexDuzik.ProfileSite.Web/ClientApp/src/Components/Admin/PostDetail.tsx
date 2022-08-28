@@ -11,6 +11,7 @@ const PostDetail = () => {
     const { id } = useParams() as RouteParams;
     const [post, setPost] = useState<Post | undefined>(undefined);
     const [title, setTitle] = useState<string | undefined>(undefined);
+    const [slug, setSlug] = useState<string | undefined>(undefined);
     const [body, setBody] = useState<string | undefined>(undefined);
     const navigate = useNavigate();
 
@@ -30,20 +31,23 @@ const PostDetail = () => {
             const post = await response.json() as Post;
             const {
                 title,
-                body
+                body,
+                slug
             } = post;
 
             setTitle(title);
+            setSlug(slug);
             setBody(body);
             setPost(post);
         })();
     });
 
     const onSave = useCallback(() => {
-        if (!title || !body) return;
+        if (!title || !body || !slug) return;
 
         const formData = new FormData();
         formData.append('title', title);
+        formData.append('slug', slug);
         formData.append('body', body);
 
         (async () => {
@@ -56,7 +60,7 @@ const PostDetail = () => {
 
             navigate('/_admin');
         })();
-    }, [id, title, body, navigate]);
+    }, [id, title, body, slug, navigate]);
 
     const onCancel = useCallback(() => {
         navigate('/_admin');
@@ -73,6 +77,8 @@ const PostDetail = () => {
             editorTitle='Edit Post'
             title={title}
             onTitleChange={setTitle}
+            slug={slug}
+            onSlugChange={setSlug}
             body={body}
             onBodyChange={setBody}
             onSaveClick={onSave}

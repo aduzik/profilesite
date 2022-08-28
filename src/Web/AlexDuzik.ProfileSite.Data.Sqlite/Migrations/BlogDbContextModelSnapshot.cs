@@ -41,6 +41,35 @@ namespace AlexDuzik.ProfileSite.Data.Migrations
 
                     b.ToTable("Posts");
                 });
+
+            modelBuilder.Entity("AlexDuzik.ProfileSite.Web.Post", b =>
+                {
+                    b.OwnsOne("AlexDuzik.ProfileSite.Web.Permalink", "Permalink", b1 =>
+                        {
+                            b1.Property<Guid>("PostId")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<int>("Month")
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<string>("Slug")
+                                .IsRequired()
+                                .HasColumnType("TEXT");
+
+                            b1.Property<int>("Year")
+                                .HasColumnType("INTEGER");
+
+                            b1.HasKey("PostId");
+
+                            b1.ToTable("Posts");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PostId");
+                        });
+
+                    b.Navigation("Permalink")
+                        .IsRequired();
+                });
 #pragma warning restore 612, 618
         }
     }

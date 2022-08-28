@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 const CreatePost: React.FC = () => {
     const [title, setTitle] = useState('');
+    const [slug, setSlug] = useState('');
     const [body, setBody] = useState('');
     const navigate = useNavigate();
 
@@ -12,6 +13,7 @@ const CreatePost: React.FC = () => {
             const formData = new FormData();
             formData.append('title', title);
             formData.append('body', body);
+            formData.append('slug', slug);
 
             const result = await fetch('/api/posts', {
                 method: 'POST',
@@ -22,7 +24,7 @@ const CreatePost: React.FC = () => {
 
             navigate('/_admin');
         })();
-    }, [title, body, navigate]);
+    }, [title, slug, body, navigate]);
 
     const onCancel = useCallback(() => {
         navigate('/_admin');
@@ -33,6 +35,8 @@ const CreatePost: React.FC = () => {
             editorTitle='New Post'
             title={title}
             onTitleChange={setTitle}
+            slug={slug}
+            onSlugChange={setSlug}
             body={body}
             onBodyChange={setBody}
             onSaveClick={onSave}

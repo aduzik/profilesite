@@ -4,6 +4,7 @@ using AlexDuzik.ProfileSite.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AlexDuzik.ProfileSite.Data.Migrations
 {
     [DbContext(typeof(BlogDbContext))]
-    partial class BlogDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220828010549_Add permalink")]
+    partial class Addpermalink
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,7 +60,6 @@ namespace AlexDuzik.ProfileSite.Data.Migrations
                                 .HasColumnType("int");
 
                             b1.Property<string>("Slug")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<int>("Year")
@@ -72,8 +73,7 @@ namespace AlexDuzik.ProfileSite.Data.Migrations
                                 .HasForeignKey("PostId");
                         });
 
-                    b.Navigation("Permalink")
-                        .IsRequired();
+                    b.Navigation("Permalink");
                 });
 #pragma warning restore 612, 618
         }

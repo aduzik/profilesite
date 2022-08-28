@@ -1,6 +1,8 @@
 import { faClose, faSave } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
+import Editor from '@monaco-editor/react';
+import ReactMarkdown from 'react-markdown';
 
 export type PostEditorProps = {
     editorTitle?: string
@@ -8,6 +10,8 @@ export type PostEditorProps = {
     onTitleChange?: (title: string) => void
     body?: string
     onBodyChange?: (body: string) => void
+    slug?: string
+    onSlugChange?: (slug: string) => void
     onSaveClick?: () => void
     onCancelClick?: () => void
 }
@@ -19,6 +23,8 @@ const PostEditor: React.FC<PostEditorProps> = (props) => {
         onTitleChange,
         body,
         onBodyChange,
+        slug,
+        onSlugChange,
         onSaveClick,
         onCancelClick
     } = props;
@@ -27,8 +33,12 @@ const PostEditor: React.FC<PostEditorProps> = (props) => {
         if (onTitleChange) onTitleChange(e.currentTarget.value);
     }, [onTitleChange]);
 
-    const onBodyTextChanged = useCallback((e: React.FormEvent<HTMLTextAreaElement>) => {
-        if (onBodyChange) onBodyChange(e.currentTarget.value);
+    const onSlugTextChanged = useCallback((e: React.FormEvent<HTMLInputElement>) => {
+        if (onSlugChange) onSlugChange(e.currentTarget.value);
+    }, [onSlugChange]);
+
+    const onBodyTextChanged = useCallback((value: string | undefined) => {
+        if (onBodyChange) onBodyChange(value || '');
     }, [onBodyChange]);
 
     const onSaveButtonClicked = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
@@ -38,6 +48,28 @@ const PostEditor: React.FC<PostEditorProps> = (props) => {
     const onCancelButtonClicked = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
         if (onCancelClick) onCancelClick();
     }, [onCancelClick]);
+
+    const previewContainerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const resizeHandler = () => {
+            const previewContainer = previewContainerRef.current;
+            if (!previewContainer) return;
+
+            var parent = previewContainer.parentElement;
+            previewContainer.style.maxWidth = `${parent?.clientWidth}px`;
+            previewContainer.style.maxHeight = `${parent?.clientHeight}px`;
+        };
+
+        requestAnimationFrame(() => {
+            resizeHandler();
+        })
+
+        window.addEventListener('resize', resizeHandler);
+        return () => {
+            window.removeEventListener('resize', resizeHandler);
+        }
+    })
 
     const canSave = title && title.length > 0 && body && body.length > 0;
 
@@ -61,9 +93,29 @@ const PostEditor: React.FC<PostEditorProps> = (props) => {
                     <input className='w-full' type="text" id="title" value={title} onChange={onTitleTextChanged} />
                 </div>
             </div>
+            <div className='my-3'>
+                <label htmlFor='slug'>Slug</label>
+                <div>
+                    <input className='w-1/2' type='text' id='slug' value={slug} onChange={onSlugTextChanged} />
+                </div>
+            </div>
             <div className='my-3 flex-grow flex flex-col'>
                 <label htmlFor='body'>Body</label>
-                <textarea className='flex-grow' id='body' value={body} onChange={onBodyTextChanged}></textarea>
+                <div className='flex-grow flex flex-row gap-3'>
+                    <div className='basis-1/2'>
+                        <Editor
+                            language='markdown'
+                            value={body}
+                            onChange={onBodyTextChanged} />
+                    </div>
+                    <div className='basis-1/2'>
+                        <div ref={previewContainerRef} className='w-full max-h-0 overflow-auto prose max-w-none prose-stone prose-headings:font-serif prose-a:text-emerald-600 prose-a:no-underline prose-a:border-b prose-a:border-b-transparent hover:prose-a:border-b-emerald-600 prose-a:transition-colors'>
+                            <ReactMarkdown>
+                                {body || ''}
+                            </ReactMarkdown>
+                        </div>
+                    </div>
+                </div>
             </div>
         </>
     )
